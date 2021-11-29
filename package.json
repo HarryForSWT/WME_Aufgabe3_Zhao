@@ -1,0 +1,17 @@
+{
+  "name": "WME_A3_Yiming_Zhao",
+  "version": "1.0.0",
+  "description": "This is the solution for the WME exercise 3 created by <YourName>.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yiming Zhao",
+  "license": "",
+  "dependencies": {
+    "body-parser": "1.x",
+    "csvtojson": "^2.0.10",
+    "express": "^4.17.1"
+  }
+}
