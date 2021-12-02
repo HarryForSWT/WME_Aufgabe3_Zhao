@@ -116,6 +116,7 @@ app.get('/properties', function (req, res) {
 	}
 	res.contentType('application/json');
 	res.send(properties);
+
 })
 
 app.get('/properties/:num', function (req, res) {
@@ -135,10 +136,6 @@ app.get('/properties/:num', function (req, res) {
 	}
 })
 
-
-
-
-
 function pad(n){
 	n= n.toString();
 	while (n.length <3){
@@ -146,6 +143,74 @@ function pad(n){
 	}
 	return n;
 }
+
+app.post('/items', function (req, res) {
+
+	/*Algoritmus für die größte Zahl in einem Array, 
+	aber eigentlich macht das keinen Sinn, 
+	denn id wird sowieso nach der Reihenfolge von Zahl erstellt,
+	man kann stattdessen auch die length nutzen und danach auch 
+	plus 1 um die neue id zu bekommen
+	*/
+	let maxid = "0";
+	csvToJsonObject.forEach(function (element) {
+		let currentid = element['id'];
+		if (currentid > maxid) {
+			maxid = currentid;
+		}
+	});
+
+	
+
+	maxid = +maxid; //Konventierung vom String zu Int
+	maxid++;
+	//Um sicher zu stellen, dass id die zugelassene Form hat.
+	const newCountryId = pad(maxid);
+
+	let newCountry = {
+		id: newCountryId,
+		name: req.body["name"],
+		birth_rate_per_1000: req.body["birth_rate_per_1000"],
+		cell_phones_per_100: req.body["cell_phones_per_100"],
+		children_per_woman: "-",
+		electricity_consumption_per_capita: "-",
+		gdp_per_capita: "-",
+		gdp_per_capita_growth: "-",
+		inflation_annual: "-",
+		internet_user_per_100: "-",
+		life_expectancy: "-",
+		military_expenditure_percent_of_gdp: "-",
+		gps_lat: "-",
+		gps_long: "-"
+	};
+	csvToJsonObject.push(newCountry);
+	res.status(201);
+	res.send('Added country ' + req.body["name"] + ' to list!');
+
+})
+
+
+app.delete('/items', function (req, res) {
+	const deletedCountry = csvToJsonObject.pop();
+	res.status(200);
+	res.send('Deleted last country: ' + deletedCountry["name"] + '!');
+})
+
+app.delete('/items/:id', function (req, res) {
+	var id = req.params.id;
+
+	let filteredJson = csvToJsonObject.find(country => country.id === id);
+	if(typeof filteredJson != 'undefined'){
+		csvToJsonObject = csvToJsonObject.filter(country => country.id != id);
+		res.status(200);
+		res.send('Item ' + id + ' deleted successfully.');
+	}else {
+		res.status(404);
+		res.send('No such id ' + id + ' in database');
+	}
+
+})
+
 
 
 // DO NOT CHANGE!
