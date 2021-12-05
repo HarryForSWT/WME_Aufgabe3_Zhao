@@ -1,9 +1,14 @@
 let API_URL = 'http://localhost:3000'
 
-function pad(n) {
-  n = n + '';
-  return n.length >= 3 ? n : new Array(3 - n.length + 1).join(0) + n;
+function pad(n){
+	n = n + '';
+	while (n.length <3){
+		n = "0"+n;
+	}
+	return n;
 }
+
+//GET CALLs
 function getFullTable() {
   $.ajax({
     type: "GET",
@@ -91,7 +96,7 @@ $("#country_filter").submit(function (e) {
 });
 
 
-//show funktion
+//show funktion GET CALL
 $("#show_selected_prop").click(function (e) {
   e.preventDefault();
   var propSelection = document.getElementById("prop_selection");
@@ -99,7 +104,7 @@ $("#show_selected_prop").click(function (e) {
   $('#world_data_table tr > *:nth-child(' + n + ')').show();
 });
 
-//hide funktion
+//hide funktion GET CALL
 $("#hide_selected_prop").click(function (e) {
   e.preventDefault();
   var propSelection = document.getElementById("prop_selection");
@@ -107,6 +112,7 @@ $("#hide_selected_prop").click(function (e) {
   $('#world_data_table tr > *:nth-child(' + n + ')').hide();
 });
 
+//Add Country POST CALL
 $("#country_add").submit(function (e) {
   e.preventDefault();
   var country_name = $("#country_name").val();
@@ -126,36 +132,27 @@ $("#country_add").submit(function (e) {
       contentType: "application/json",
       dataType: 'text',
       success: function (data) {
-        let element = $("#status_new_country").append("<p> Added country " + country_name + " to list!</p>");
-        setTimeout(function () {
-          $("#status_new_country").children().remove();
-        }, 2500)
-        var x = document.getElementById('status_new_country');
-        x.style.backgroundColor = "lightgreen";
+        var bg6 = document.getElementById('status_new_country');
+        bg6.innerHTML="Added country " + country_name + " to list!";
+        bg6.style.backgroundColor = "lightgreen";
         setTimeout(function () { $('#status_new_country').html(""); }, 2500);
         getFullTable();
       }, error: function (jqXHR, text, err) {
-        console.log(err);
-        console.log(123456);
-        let element = $("#status_new_country").append("<p> Error! </p>");
-        setTimeout(function () {
-          $("#status_new_country").children().remove();
-
-        }, 2500)
-        var x = document.getElementById('status_new_country');
-        x.style.backgroundColor = "red";
+        var bg7 = document.getElementById('status_new_country');
+        bg7.innerHTML=text;
+        bg7.style.backgroundColor = "red";
+        setTimeout(function () { $('#status_new_country').html(""); }, 2500);
       }
     });
   }else{
-    var x = document.getElementById('status_new_country');
-    x.innerHTML ="Fill out the correct details! ";
-    x.style.backgroundColor = "red";
-    setTimeout(function () {
-      $("#status_new_country").children().remove();
-    }, 2500)
+    var bg8 = document.getElementById('status_new_country');
+    bg8.innerHTML ="Fill out the correct details! ";
+    bg8.style.backgroundColor = "red";
+    setTimeout(function () { $('#status_new_country').html(""); }, 2500);
   }
 });
 
+//DELETE CALL
 $("#rm_submit").click(function (e) {
   e.preventDefault();
   var country_delete_id = pad($("#country_delete_id").val());

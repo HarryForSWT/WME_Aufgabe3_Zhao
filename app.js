@@ -137,56 +137,16 @@ app.get('/properties/:num', function (req, res) {
 })
 
 function pad(n){
-	n= n.toString();
+	n = n + '';
 	while (n.length <3){
-		num = "0"+n;
+		n = "0"+n;
 	}
 	return n;
 }
 
 app.post('/items', function (req, res) {
 
-	let id1 = "0";
-	let id2 = "0";
-
-
-	csvToJsonObject.forEach(function (element) {
-		id2 = element['id'];
-		if (id2 > id1) {
-			id1 = id2;
-		}
-	});
-
-	id1 = parseInt(id1);
-	id1++;
-	const newCountryId = pad(id1);
-	let newCountry = {
-		id: newCountryId,
-		name: req.body["name"],
-		birth_rate_per_1000: req.body["birth_rate_per_1000"],
-		cell_phones_per_100: req.body["cell_phones_per_100"],
-		children_per_woman: "-",
-		electricity_consumption_per_capita: "-",
-		gdp_per_capita: "-",
-		gdp_per_capita_growth: "-",
-		inflation_annual: "-",
-		internet_user_per_100: "-",
-		life_expectancy: "-",
-		military_expenditure_percent_of_gdp: "-",
-		gps_lat: "-",
-		gps_long: "-"
-	};
-	csvToJsonObject.push(newCountry);
-	res.send('Added country ' + req.body["name"] + ' to list!');
-
-
-
-	/*Algoritmus für die größte Zahl in einem Array, 
-	aber eigentlich macht das keinen Sinn, 
-	denn id wird sowieso nach der Reihenfolge von Zahl erstellt,
-	man kann stattdessen auch die length nutzen und danach auch 
-	plus 1 um die neue id zu bekommen
-	
+	//Algoritmus für die größte Zahl in einem Array, 
 	let maxid = "0";
 	csvToJsonObject.forEach(function (element) {
 		let currentid = element['id'];
@@ -195,33 +155,28 @@ app.post('/items', function (req, res) {
 		}
 	});
 
-	
-
 	maxid = +maxid; //Konventierung vom String zu Int
 	maxid++;
 	//Um sicher zu stellen, dass id die zugelassene Form hat.
 	const newCountryId = pad(maxid);
-
-	let newCountry = {
+	let newCountry = req.body;
+	newCountry = {
 		id: newCountryId,
-		name: req.body["name"],
-		birth_rate_per_1000: req.body["birth_rate_per_1000"],
-		cell_phones_per_100: req.body["cell_phones_per_100"],
-		children_per_woman: "-",
-		electricity_consumption_per_capita: "-",
-		gdp_per_capita: "-",
-		gdp_per_capita_growth: "-",
-		inflation_annual: "-",
-		internet_user_per_100: "-",
-		life_expectancy: "-",
-		military_expenditure_percent_of_gdp: "-",
-		gps_lat: "-",
-		gps_long: "-"
+		... newCountry,
+		children_per_woman: "empty",
+		electricity_consumption_per_capita: "empty",
+		gdp_per_capita: "empty",
+		gdp_per_capita_growth: "empty",
+		inflation_annual: "empty",
+		internet_user_per_100: "empty",
+		life_expectancy: "empty",
+		military_expenditure_percent_of_gdp: "empty",
+		gps_lat: "empty",
+		gps_long: "empty"
 	};
 	csvToJsonObject.push(newCountry);
-	//res.status(200);
-	res.send('Added country ' + req.body["name"] + ' to list!');
-*/
+	res.send('Added country ' + newCountry.name + ' to list!');
+
 })
 
 
