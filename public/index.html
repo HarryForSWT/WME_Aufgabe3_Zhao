@@ -42,13 +42,16 @@
 						<form name="country_filter" id="country_filter" method="GET">
 							<p>
 								<label for="country_filter_id">country id</label>
+								<div id="status_id"></div>
 								<input type="text" name="country_filter_id" id="country_filter_id">
 							</p>
 							<p>
 								<label for="country_filter_range">country id range (eg: 2-5)</label>
+								<div id="status_range"></div>
 								<input type="text" name="country_filter_range" id="country_filter_range">
 							</p>
 							<p class="submit">
+								<p id="tipp">The result on the table will refer to "country id range" if you input in both function fields</!--p>
 								<input class="green_btn" type="submit" name="submit" id="add_submit" value="Filter Countries">
 							</p>
 						</form>
@@ -82,6 +85,7 @@
 							</p>
 							<p class="submit">
 								<input class="green_btn" type="submit" name="submit" id="add_submit" value="Add Country">
+								<div id="status_new_country"></div>
 							</p>
 						</form>
 					</div>
@@ -96,6 +100,7 @@
 							</p>
 							<p class="submit">
 								<input class="green_btn" type="submit" name="submit" id="rm_submit" value="Remove Country">
+								<div id="status_deleted_country"></div>
 							</p>
 						</form>
 					</div>

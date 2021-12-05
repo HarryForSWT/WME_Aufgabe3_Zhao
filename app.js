@@ -45,9 +45,9 @@ app.get('/items', function (req, res) {
 
 app.get('/items/:id', function (req, res) {
 	const id = req.params.id;
-	let filteredJson = csvToJsonObject.find((country) => country['id'] === id);
+	let filteredJson = csvToJsonObject.filter((country) => country['id'] === id);
 	
-	if (typeof filteredJson != 'undefined') {
+	if (filteredJson.length!=0) {
 		res.status(200);
 		res.contentType('application/json');
 		res.send(filteredJson);
@@ -68,8 +68,8 @@ app.get('/items/:id1/:id2', function (req, res) {
 	}
 	//Beispiel : http://localhost:3000/items/004/004
 	else if(id1 === id2) {
-		let filteredJson = csvToJsonObject.find((country) => country['id'] === id1);
-		if (typeof filteredJson != 'undefined') {
+		let filteredJson = csvToJsonObject.filter((country) => country['id'] === id1);
+		if (filteredJson.length!=0) {
 			res.status(200);
 			res.contentType('application/json');
 			res.send(filteredJson);
@@ -184,7 +184,7 @@ app.post('/items', function (req, res) {
 		gps_long: "-"
 	};
 	csvToJsonObject.push(newCountry);
-	res.status(201);
+	//res.status(201);
 	res.send('Added country ' + req.body["name"] + ' to list!');
 
 })
@@ -201,7 +201,8 @@ app.delete('/items/:id', function (req, res) {
 
 	let filteredJson = csvToJsonObject.find(country => country.id === id);
 	if(typeof filteredJson != 'undefined'){
-		csvToJsonObject = csvToJsonObject.filter(country => country.id != id);
+		csvToJsonObject = csvToJsonObject.filter(country => country[id] != id);
+		console.log(csvToJsonObject);
 		res.status(200);
 		res.send('Item ' + id + ' deleted successfully.');
 	}else {
