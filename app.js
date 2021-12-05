@@ -146,12 +146,47 @@ function pad(n){
 
 app.post('/items', function (req, res) {
 
+	let id1 = "0";
+	let id2 = "0";
+
+
+	csvToJsonObject.forEach(function (element) {
+		id2 = element['id'];
+		if (id2 > id1) {
+			id1 = id2;
+		}
+	});
+
+	id1 = parseInt(id1);
+	id1++;
+	const newCountryId = pad(id1);
+	let newCountry = {
+		id: newCountryId,
+		name: req.body["name"],
+		birth_rate_per_1000: req.body["birth_rate_per_1000"],
+		cell_phones_per_100: req.body["cell_phones_per_100"],
+		children_per_woman: "-",
+		electricity_consumption_per_capita: "-",
+		gdp_per_capita: "-",
+		gdp_per_capita_growth: "-",
+		inflation_annual: "-",
+		internet_user_per_100: "-",
+		life_expectancy: "-",
+		military_expenditure_percent_of_gdp: "-",
+		gps_lat: "-",
+		gps_long: "-"
+	};
+	csvToJsonObject.push(newCountry);
+	res.send('Added country ' + req.body["name"] + ' to list!');
+
+
+
 	/*Algoritmus für die größte Zahl in einem Array, 
 	aber eigentlich macht das keinen Sinn, 
 	denn id wird sowieso nach der Reihenfolge von Zahl erstellt,
 	man kann stattdessen auch die length nutzen und danach auch 
 	plus 1 um die neue id zu bekommen
-	*/
+	
 	let maxid = "0";
 	csvToJsonObject.forEach(function (element) {
 		let currentid = element['id'];
@@ -184,9 +219,9 @@ app.post('/items', function (req, res) {
 		gps_long: "-"
 	};
 	csvToJsonObject.push(newCountry);
-	//res.status(201);
+	//res.status(200);
 	res.send('Added country ' + req.body["name"] + ' to list!');
-
+*/
 })
 
 
@@ -198,11 +233,9 @@ app.delete('/items', function (req, res) {
 
 app.delete('/items/:id', function (req, res) {
 	var id = req.params.id;
-
-	let filteredJson = csvToJsonObject.find(country => country.id === id);
-	if(typeof filteredJson != 'undefined'){
-		csvToJsonObject = csvToJsonObject.filter(country => country[id] != id);
-		console.log(csvToJsonObject);
+	const filteredJson = csvToJsonObject.find(country => country.id === id);
+	if(filteredJson != undefined){
+		csvToJsonObject = csvToJsonObject.filter(country => country['id'] != id);
 		res.status(200);
 		res.send('Item ' + id + ' deleted successfully.');
 	}else {

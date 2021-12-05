@@ -40,7 +40,7 @@ $('document').ready(function (e) {
 });
 
 
-$("#add_submit").click(function (e) {
+$("#country_filter").submit(function (e) {
   e.preventDefault();
   $("#status_id").html("");
   $("#status_range").html("");
@@ -78,13 +78,13 @@ $("#add_submit").click(function (e) {
       });
     }, error: function (jqXHR, text, err) {
       if (country_id_range) {
-        $("#status_range").append("<p> Range not possible.</p>");
-        var x = document.getElementById('status_range');
-        x.style.backgroundColor = "red";
+        var bg1 = document.getElementById('status_range');
+        bg1.innerHTML="Range not possible."
+        bg1.style.backgroundColor = "red";
       }else if (country_id) {
-        $("#status_id").append("<p> No such id " + country_id + " in database.</p>");
-        var x = document.getElementById('status_id');
-        x.style.backgroundColor = "red";
+        var bg2 = document.getElementById('status_id');
+        bg2.innerHTML= "No such id " + country_id + " in database."
+        bg2.style.backgroundColor = "red";
       }
     }
   });
@@ -107,8 +107,7 @@ $("#hide_selected_prop").click(function (e) {
   $('#world_data_table tr > *:nth-child(' + n + ')').hide();
 });
 
-
-$("#ad_submit").click(function (e) {
+$("#country_add").submit(function (e) {
   e.preventDefault();
   var country_name = $("#country_name").val();
   var country_birth = $("#country_birth").val();
@@ -119,7 +118,10 @@ $("#ad_submit").click(function (e) {
     $.ajax({
       type: "POST",
       url: `${API_URL}/items`,
-      data: JSON.stringify({ name: country_name, birth_rate_per_1000: country_birth, cell_phones_per_100: country_cellphone }),
+      data: JSON.stringify({ 
+        name: country_name, 
+        birth_rate_per_1000: country_birth, 
+        cell_phones_per_100: country_cellphone }),
       async: true,
       contentType: "application/json",
       dataType: 'text',
@@ -127,30 +129,30 @@ $("#ad_submit").click(function (e) {
         let element = $("#status_new_country").append("<p> Added country " + country_name + " to list!</p>");
         setTimeout(function () {
           $("#status_new_country").children().remove();
-        }, 2000)
+        }, 2500)
         var x = document.getElementById('status_new_country');
         x.style.backgroundColor = "lightgreen";
-        setTimeout(function () { $('#status_new_country').html(""); }, 2000);
+        setTimeout(function () { $('#status_new_country').html(""); }, 2500);
         getFullTable();
       }, error: function (jqXHR, text, err) {
         console.log(err);
+        console.log(123456);
         let element = $("#status_new_country").append("<p> Error! </p>");
         setTimeout(function () {
           $("#status_new_country").children().remove();
 
-        }, 2000)
+        }, 2500)
         var x = document.getElementById('status_new_country');
         x.style.backgroundColor = "red";
       }
     });
   }else{
-    let element = $("#status_new_country").append("<p> Fill out the correct details! </p>");
     var x = document.getElementById('status_new_country');
+    x.innerHTML ="Fill out the correct details! ";
     x.style.backgroundColor = "red";
     setTimeout(function () {
       $("#status_new_country").children().remove();
-
-    }, 2000)
+    }, 2500)
   }
 });
 
@@ -158,8 +160,11 @@ $("#rm_submit").click(function (e) {
   e.preventDefault();
   var country_delete_id = pad($("#country_delete_id").val());
 
-  var url = '';
-
+  var url = '';  //Initialisieren für ajax' url, wenn nicht eingegeben wird, 
+                //dann wird "app.delete('/items')" aufgerufen
+  
+   //Eingabe mit 000 wird als nicht eingegeben betrachtet. 
+  //Hier ist dann wenn nicht 000 eingegeben wird.
   if (country_delete_id != 000) {
     url = '/' + country_delete_id;
   }
@@ -169,30 +174,17 @@ $("#rm_submit").click(function (e) {
     async: true,
     dataType: 'text',
     success: function (data) {
-      var list = data.split(" ");
-      switch (list[0]) {
-        case "Deleted":
-          $("#status_deleted_country").append("<p>" + data + "</p>");
-          var x = document.getElementById('status_deleted_country');
-          x.style.backgroundColor = "lightgreen";
-          setTimeout(function () { $('#status_deleted_country').html(""); }, 2000);
-          break;
-        case "Item":
-          $("#status_deleted_country").append("<p>" + data + "</p>");
-          var x = document.getElementById('status_deleted_country');
-          x.style.backgroundColor = "lightgreen";
-          setTimeout(function () { $('#status_deleted_country').html(""); }, 2000);
-          break;
-        case "No":
-          $("#status_deleted_country").append("<p>" + data + "</p>");
-          var x = document.getElementById('status_deleted_country');
-          x.style.backgroundColor = "red";
-          setTimeout(function () { $('#status_deleted_country').html(""); }, 2000);
-          break;
-        default: break;
-      }
+      var bg3 = document.getElementById('status_deleted_country');
+      bg3.innerHTML= data;
+      bg3.style.backgroundColor = "lightgreen";
+      setTimeout(function () { $('#status_deleted_country').html(""); }, 2500);
       getFullTable();
     }, error: function (jqXHR, text, err) {
+      text = 'No such id ' + country_delete_id  + ' in database'
+       var bg5 = document.getElementById('status_deleted_country');
+       bg5.innerHTML= text;
+       bg5.style.backgroundColor = "red";
+       setTimeout(function () { $('#status_deleted_country').html(""); }, 2500);
     }
   });
 });
